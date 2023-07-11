@@ -1,0 +1,6 @@
+spring:
+  datasource:
+    url: jdbc:mariadb://localhost/selfcheckout
+    username: selfcheckout
+    password: selfcheckout
+    driver-class-name: org.mariadb.jdbc.Driver
