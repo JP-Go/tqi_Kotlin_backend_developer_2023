@@ -8,4 +8,5 @@ interface IProductService {
     fun findById(id: Long): Product
     fun findAll(): List<Product>
     fun createProduct(dto: ProductDTO): Product
+    fun setProductCategory(id: Long, productCategoryId: Long?): Product
 }
