@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service
 
 @Service
 class ProductService(
-        val repository: ProductRepository,
-        val categoryService: IProductCategoryService
+    val repository: ProductRepository,
+    val categoryService: IProductCategoryService,
 ) : IProductService {
 
     override fun findById(id: Long): Product {
@@ -24,6 +24,12 @@ class ProductService(
     }
 
     override fun createProduct(dto: ProductDTO): Product {
+    override fun setProductCategory(id: Long, productCategoryId: Long?): Product {
+        val product = this.findById(id).apply {
+            productCategory = productCategoryId?.let { categoryService.findById(it) }
+        }
+        return repository.save(product)
+    }
 
         dto.productCategory
                 ?.let {
