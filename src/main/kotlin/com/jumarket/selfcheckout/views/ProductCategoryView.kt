@@ -2,6 +2,7 @@ package com.jumarket.selfcheckout.views
 
 import com.jumarket.selfcheckout.entities.ProductCategory
 
-sealed class ProductCategoryView(val name: String, val id: Long?) {
-    class FromEntity(entity: ProductCategory) : ProductCategoryView(entity.name, entity.id)
-}
+data class ProductCategoryView(val name: String, val id: Long?)
+
+fun productCategoryViewFromEntity(entity: ProductCategory) =
+        ProductCategoryView(entity.name, entity.id)
