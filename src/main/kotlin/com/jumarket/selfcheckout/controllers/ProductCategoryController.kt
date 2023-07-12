@@ -4,6 +4,7 @@ import com.jumarket.selfcheckout.dtos.ProductCategoryDTO
 import com.jumarket.selfcheckout.entities.ProductCategory
 import com.jumarket.selfcheckout.services.IProductCategoryService
 import com.jumarket.selfcheckout.views.ProductCategoryView
+import com.jumarket.selfcheckout.views.productCategoryViewFromEntity
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -27,13 +28,13 @@ class ProductCategoryController(val productCategoryService: IProductCategoryServ
     @GetMapping("/{id}")
     fun findCategory(@PathVariable id: Long): ProductCategoryView {
         val category = productCategoryService.findById(id)
-        return ProductCategoryView.FromEntity(category)
+        return productCategoryViewFromEntity(category)
     }
 
     @PostMapping
     fun createCategory(@RequestBody dto: ProductCategoryDTO): ProductCategoryView {
         val productCategorySaved = productCategoryService.createNewCategory(dto)
-        return ProductCategoryView.FromEntity(productCategorySaved)
+        return productCategoryViewFromEntity(productCategorySaved)
     }
 
     @DeleteMapping("/{id}")
@@ -49,7 +50,7 @@ class ProductCategoryController(val productCategoryService: IProductCategoryServ
     ): ResponseEntity<ProductCategoryView> {
         val updatedCategory = productCategoryService.changeProductCategoryName(id, dto.name)
         return ResponseEntity(
-                ProductCategoryView.FromEntity(updatedCategory),
+                productCategoryViewFromEntity(updatedCategory),
                 HttpStatus.OK,
         )
     }

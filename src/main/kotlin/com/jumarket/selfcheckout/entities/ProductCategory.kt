@@ -11,5 +11,5 @@ import jakarta.persistence.Table
 @Table(name = "product_category")
 data class ProductCategory(
         @Column(nullable = false) var name: String = "",
-        @Id @GeneratedValue(strategy = GenerationType.IDENTITY) var id: Long? = null
+        @Id @GeneratedValue(strategy = GenerationType.IDENTITY) var id: Long? = null,
 )

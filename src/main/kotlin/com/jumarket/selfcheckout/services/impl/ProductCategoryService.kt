@@ -12,7 +12,7 @@ class ProductCategoryService(private val repository: ProductCategoryRepository) 
 
     override fun findById(id: Long): ProductCategory {
         return repository.findById(id).orElseThrow {
-            throw IllegalArgumentException("Customer with $id not found")
+            throw IllegalArgumentException("Product category with $id not found")
         }
     }
 
