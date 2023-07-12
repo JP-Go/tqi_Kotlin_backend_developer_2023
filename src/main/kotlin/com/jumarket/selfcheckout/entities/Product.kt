@@ -16,7 +16,7 @@ data class Product(
         @Column(nullable = false, name = "product_name") var productName: String = "",
         @Column(nullable = false) var unit: String = "",
         @Column(nullable = false) var price: BigDecimal = BigDecimal.ZERO,
-        @Id @GeneratedValue(strategy = GenerationType.IDENTITY) var id: Long?,
+        @Id @GeneratedValue(strategy = GenerationType.IDENTITY) var id: Long? = null,
         @ManyToOne
         @JoinColumn(name = "product_category_id")
         var productCategory: ProductCategory? = null
