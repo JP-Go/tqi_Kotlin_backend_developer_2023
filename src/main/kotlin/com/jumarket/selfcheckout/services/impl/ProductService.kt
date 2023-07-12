@@ -28,11 +28,13 @@ class ProductService(
         dto.productCategory
                 ?.let {
                     val category = categoryService.findById(it)
-                    return Product(
-                            productName = dto.name,
-                            price = dto.price,
-                            unit = dto.unit,
-                            productCategory = category
+                    return repository.save(
+                            Product(
+                                    productName = dto.name,
+                                    price = dto.price,
+                                    unit = dto.unit,
+                                    productCategory = category
+                            )
                     )
                 }
                 .run {
