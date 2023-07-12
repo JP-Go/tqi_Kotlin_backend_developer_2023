@@ -23,7 +23,6 @@ class ProductService(
         return repository.findAll()
     }
 
-    override fun createProduct(dto: ProductDTO): Product {
     override fun setProductCategory(id: Long, productCategoryId: Long?): Product {
         val product = this.findById(id).apply {
             productCategory = productCategoryId?.let { categoryService.findById(it) }
@@ -31,26 +30,11 @@ class ProductService(
         return repository.save(product)
     }
 
-        dto.productCategory
-                ?.let {
-                    val category = categoryService.findById(it)
-                    return repository.save(
-                            Product(
-                                    productName = dto.name,
-                                    price = dto.price,
-                                    unit = dto.unit,
-                                    productCategory = category
-                            )
-                    )
-                }
-                .run {
-                    return repository.save(
-                            Product(
-                                    productName = dto.name,
-                                    price = dto.price,
-                                    unit = dto.unit,
-                            )
-                    )
-                }
+    override fun createProduct(dto: ProductDTO): Product {
+        val product =
+            Product(productName = dto.name, price = dto.price, unit = dto.unit).apply {
+                productCategory = dto.productCategory?.let { categoryService.findById(it) }
+            }
+        return repository.save(product)
     }
 }
