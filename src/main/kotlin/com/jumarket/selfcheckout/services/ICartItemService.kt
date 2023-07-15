@@ -6,5 +6,6 @@ import com.jumarket.selfcheckout.entities.CartItem
 
 interface ICartItemService {
     fun findCartItem(id: Long): CartItem
+    fun findCartItemOnCart(cart: Cart, productId: Long): CartItem
     fun createCartItem(cart: Cart, dto: CartItemDTO): CartItem
 }

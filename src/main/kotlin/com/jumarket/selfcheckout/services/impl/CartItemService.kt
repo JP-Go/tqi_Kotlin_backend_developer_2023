@@ -21,6 +21,13 @@ class CartItemService(
         }
     }
 
+    override fun findCartItemOnCart(cart: Cart, productId: Long): CartItem {
+        val product = productService.findById(productId)
+        return cartItemRepository.findByCartAndProduct(cart, product).orElseThrow {
+            throw IllegalArgumentException("Product with id $productId not in cart ${cart.id}")
+        }
+    }
+
     override fun createCartItem(cart: Cart, dto: CartItemDTO): CartItem {
         val quantity = dto.quantity
         val product = productService.findById(dto.productId)
