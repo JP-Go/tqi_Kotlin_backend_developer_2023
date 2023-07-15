@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/product")
 class ProductController(
-    val productService: IProductService,
-    val productCategoryService: IProductCategoryService,
+        val productService: IProductService,
+        val productCategoryService: IProductCategoryService,
 ) {
 
     @GetMapping
@@ -41,15 +41,15 @@ class ProductController(
     }
 
     @PatchMapping("{productId}")
-    fun setToProductCategory(
-        @PathVariable productId: Long,
-        @RequestBody setProductCategoryDTO: SetProductCategoryDTO,
+    fun setProductCategory(
+            @PathVariable productId: Long,
+            @RequestBody setProductCategoryDTO: SetProductCategoryDTO,
     ): ProductView {
         val savedProduct =
-            productService.setProductCategory(
-                productId,
-                setProductCategoryDTO.productCategoryId,
-            )
+                productService.setProductCategory(
+                        productId,
+                        setProductCategoryDTO.productCategoryId,
+                )
         return productViewfromEntity(savedProduct)
     }
 }
