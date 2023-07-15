@@ -1,16 +1,18 @@
 package com.jumarket.selfcheckout.services.impl
 
+import com.jumarket.selfcheckout.dtos.CartItemDTO
 import com.jumarket.selfcheckout.entities.Cart
 import com.jumarket.selfcheckout.entities.CartItem
-import com.jumarket.selfcheckout.entities.Product
 import com.jumarket.selfcheckout.repositories.CartItemRepository
 import com.jumarket.selfcheckout.services.ICartItemService
+import com.jumarket.selfcheckout.services.IProductService
 import java.math.BigDecimal
 import org.springframework.stereotype.Service
 
 @Service
 class CartItemService(
         private val cartItemRepository: CartItemRepository,
+        private val productService: IProductService
 ) : ICartItemService {
 
     override fun findCartItem(id: Long): CartItem {
@@ -19,7 +21,9 @@ class CartItemService(
         }
     }
 
-    override fun createCartItem(cart: Cart, product: Product, quantity: Int): CartItem {
+    override fun createCartItem(cart: Cart, dto: CartItemDTO): CartItem {
+        val quantity = dto.quantity
+        val product = productService.findById(dto.productId)
         val totalPrice: BigDecimal = product.price * BigDecimal(quantity)
         return CartItem(
                 cart = cart,
