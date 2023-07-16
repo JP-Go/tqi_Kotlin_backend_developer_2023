@@ -3,13 +3,12 @@ package com.jumarket.selfcheckout.controllers
 import com.jumarket.selfcheckout.dtos.CartItemDTO
 import com.jumarket.selfcheckout.dtos.PayCartDTO
 import com.jumarket.selfcheckout.dtos.RemoveCartItemDTO
-import com.jumarket.selfcheckout.entities.Cart
 import com.jumarket.selfcheckout.enumerations.PaymentMethod
 import com.jumarket.selfcheckout.services.ICartItemService
 import com.jumarket.selfcheckout.services.ICartService
 import com.jumarket.selfcheckout.services.IProductService
 import com.jumarket.selfcheckout.views.CartView
-import com.jumarket.selfcheckout.views.cartItemViewFromEntity
+import com.jumarket.selfcheckout.views.cartFromEntity
 import java.math.BigDecimal
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
@@ -28,14 +27,15 @@ class CartController(
 ) {
 
     @PostMapping
-    fun createNewCart(): Cart {
-        return cartService.createCart()
+    fun createNewCart(): CartView {
+        val cart = cartService.createCart()
+        return cartFromEntity(cart)
     }
 
     @GetMapping("/{cartId}")
     fun getCart(@PathVariable cartId: Long): CartView {
         val cart = cartService.findCart(cartId)
-        return CartView(id = cart.id as Long, items = cart.items.map { cartItemViewFromEntity(it) })
+        return cartFromEntity(cart)
     }
 
     @PostMapping("/{cartId}/add")
@@ -43,7 +43,7 @@ class CartController(
         val cart = cartService.findCart(cartId)
         val cartItem = cartItemService.createCartItem(cart, dto)
         cartService.addCartItem(cartItem)
-        return CartView(id = cart.id as Long, items = cart.items.map { cartItemViewFromEntity(it) })
+        return cartFromEntity(cart)
     }
 
     @PatchMapping("/{cartId}/remove")
@@ -54,7 +54,7 @@ class CartController(
         val cart = cartService.findCart(cartId)
         val cartItem = cartItemService.findCartItemOnCart(cart, dto.productId)
         cartService.removeCartItem(cartItem)
-        return CartView(id = cart.id as Long, items = cart.items.map { cartItemViewFromEntity(it) })
+        return cartFromEntity(cart)
     }
 
     @PatchMapping("/{cartId}/checkout")
