@@ -2,6 +2,7 @@ package com.jumarket.selfcheckout.services.impl
 
 import com.jumarket.selfcheckout.dtos.ProductCategoryDTO
 import com.jumarket.selfcheckout.entities.ProductCategory
+import com.jumarket.selfcheckout.exceptions.ProductCategoryNotFoundException
 import com.jumarket.selfcheckout.repositories.ProductCategoryRepository
 import com.jumarket.selfcheckout.services.IProductCategoryService
 import org.springframework.stereotype.Service
@@ -12,7 +13,7 @@ class ProductCategoryService(private val repository: ProductCategoryRepository) 
 
     override fun findById(id: Long): ProductCategory {
         return repository.findById(id).orElseThrow {
-            throw IllegalArgumentException("Product category with $id not found")
+            throw ProductCategoryNotFoundException("Product category with $id not found")
         }
     }
 
