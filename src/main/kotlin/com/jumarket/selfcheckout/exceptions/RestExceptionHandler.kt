@@ -1,6 +1,5 @@
 package com.jumarket.selfcheckout.exceptions
 
-import java.time.LocalDateTime
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.FieldError
@@ -8,6 +7,7 @@ import org.springframework.validation.ObjectError
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
+import java.time.LocalDateTime
 
 @RestControllerAdvice
 class RestExceptionHandler() {
@@ -22,31 +22,31 @@ class RestExceptionHandler() {
         }
 
         return ResponseEntity(
-                ExceptionDetails(
-                        title = "Bad Request",
-                        message = "Missing or invalid fields",
-                        timestamp = LocalDateTime.now(),
-                        details = errors
-                ),
-                HttpStatus.BAD_REQUEST
+            ExceptionDetails(
+                title = "Bad request",
+                message = "Missing or invalid fields",
+                timestamp = LocalDateTime.now(),
+                details = errors,
+            ),
+            HttpStatus.BAD_REQUEST,
         )
     }
 
-    @ExceptionHandler(ProductNotFoundException::class)
-    fun handleProductNotFoundException(
-            ex: ProductNotFoundException
+    @ExceptionHandler(MissingResourceException::class)
+    fun handleMissingResourceException(
+        ex: MissingResourceException,
     ): ResponseEntity<ExceptionDetails> {
         return ResponseEntity(
-                ExceptionDetails(
-                        title = "Product not found",
-                        message = ex.message,
-                        timestamp = LocalDateTime.now(),
-                        details =
-                                hashMapOf(
-                                        "product" to ex.message,
-                                )
+            ExceptionDetails(
+                title = "Bad request",
+                message = "Missing resource",
+                timestamp = LocalDateTime.now(),
+                details =
+                hashMapOf(
+                    ex.resourceName to ex.message,
                 ),
-                HttpStatus.BAD_REQUEST
+            ),
+            HttpStatus.BAD_REQUEST,
         )
     }
 }
