@@ -9,11 +9,11 @@ import org.springframework.stereotype.Service
 
 @Service
 class ProductCategoryService(private val repository: ProductCategoryRepository) :
-        IProductCategoryService {
+    IProductCategoryService {
 
     override fun findById(id: Long): ProductCategory {
         return repository.findById(id).orElseThrow {
-            throw ProductCategoryNotFoundException("Product category with $id not found")
+            throw ProductCategoryNotFoundException("Product category with id $id not found")
         }
     }
 
