@@ -49,4 +49,22 @@ class RestExceptionHandler() {
             HttpStatus.BAD_REQUEST,
         )
     }
+
+    @ExceptionHandler(IllegalOperationException::class)
+    fun handleIllegalAccessException(
+        ex: IllegalOperationException,
+    ): ResponseEntity<ExceptionDetails> {
+        return ResponseEntity(
+            ExceptionDetails(
+                title = "Bad request",
+                message = "Illegal operation",
+                timestamp = LocalDateTime.now(),
+                details = hashMapOf(
+                    "details" to ex.message,
+                ),
+
+            ),
+            HttpStatus.BAD_REQUEST,
+        )
+    }
 }
