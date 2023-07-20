@@ -1,3 +1,10 @@
 package com.jumarket.selfcheckout.dtos
 
-data class PayCartDTO(var paymentMethod: String)
+import com.jumarket.selfcheckout.validators.SupportedPaymentMethod
+import jakarta.validation.constraints.NotNull
+
+data class PayCartDTO(
+        @field:NotNull(message = "Missing paymentMethod")
+        @field:SupportedPaymentMethod
+        var paymentMethod: String,
+)

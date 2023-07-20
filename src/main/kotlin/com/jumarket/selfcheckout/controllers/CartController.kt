@@ -9,6 +9,7 @@ import com.jumarket.selfcheckout.services.ICartService
 import com.jumarket.selfcheckout.services.IProductService
 import com.jumarket.selfcheckout.views.CartView
 import com.jumarket.selfcheckout.views.cartFromEntity
+import jakarta.validation.Valid
 import java.math.BigDecimal
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
@@ -39,7 +40,10 @@ class CartController(
     }
 
     @PostMapping("/{cartId}/add")
-    fun addProductToCart(@PathVariable cartId: Long, @RequestBody dto: CartItemDTO): CartView {
+    fun addProductToCart(
+            @PathVariable cartId: Long,
+            @RequestBody @Valid dto: CartItemDTO
+    ): CartView {
         val cart = cartService.findCart(cartId)
         val cartItem = cartItemService.createCartItem(cart, dto)
         cartService.addCartItem(cartItem)
@@ -49,7 +53,7 @@ class CartController(
     @PatchMapping("/{cartId}/remove")
     fun removeProductFromCart(
             @PathVariable cartId: Long,
-            @RequestBody dto: RemoveCartItemDTO
+            @RequestBody @Valid dto: RemoveCartItemDTO
     ): CartView {
         val cart = cartService.findCart(cartId)
         val cartItem = cartItemService.findCartItemOnCart(cart, dto.productId)
@@ -58,7 +62,7 @@ class CartController(
     }
 
     @PatchMapping("/{cartId}/checkout")
-    fun payCart(@PathVariable cartId: Long, @RequestBody dto: PayCartDTO): String {
+    fun payCart(@PathVariable cartId: Long, @RequestBody @Valid dto: PayCartDTO): String {
         val cart = cartService.findCart(cartId)
         val method = PaymentMethod.valueOf(dto.paymentMethod)
         val total: BigDecimal = cart.items.fold(BigDecimal.ZERO) { acc, it -> it.totalPrice + acc }

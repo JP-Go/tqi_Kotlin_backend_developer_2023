@@ -7,6 +7,7 @@ import com.jumarket.selfcheckout.services.IProductCategoryService
 import com.jumarket.selfcheckout.services.IProductService
 import com.jumarket.selfcheckout.views.ProductView
 import com.jumarket.selfcheckout.views.productViewfromEntity
+import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -35,7 +36,7 @@ class ProductController(
     }
 
     @PostMapping
-    fun createProduct(@RequestBody dto: ProductDTO): Product {
+    fun createProduct(@RequestBody @Valid dto: ProductDTO): Product {
         val savedProduct = productService.createProduct(dto)
         return savedProduct
     }

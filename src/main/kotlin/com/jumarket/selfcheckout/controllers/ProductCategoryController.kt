@@ -5,6 +5,7 @@ import com.jumarket.selfcheckout.entities.ProductCategory
 import com.jumarket.selfcheckout.services.IProductCategoryService
 import com.jumarket.selfcheckout.views.ProductCategoryView
 import com.jumarket.selfcheckout.views.productCategoryViewFromEntity
+import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -32,7 +33,7 @@ class ProductCategoryController(val productCategoryService: IProductCategoryServ
     }
 
     @PostMapping
-    fun createCategory(@RequestBody dto: ProductCategoryDTO): ProductCategoryView {
+    fun createCategory(@RequestBody @Valid dto: ProductCategoryDTO): ProductCategoryView {
         val productCategorySaved = productCategoryService.createNewCategory(dto)
         return productCategoryViewFromEntity(productCategorySaved)
     }
@@ -46,7 +47,7 @@ class ProductCategoryController(val productCategoryService: IProductCategoryServ
     @PatchMapping("/{id}")
     fun changeCategoryName(
             @PathVariable id: Long,
-            @RequestBody dto: ProductCategoryDTO
+            @RequestBody @Valid dto: ProductCategoryDTO
     ): ResponseEntity<ProductCategoryView> {
         val updatedCategory = productCategoryService.changeProductCategoryName(id, dto.name)
         return ResponseEntity(
