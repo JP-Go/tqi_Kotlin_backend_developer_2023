@@ -33,9 +33,9 @@ O backend estará disponível em `http://localhost:8080`
 # TODO
 
 - [ ] Regra de negócio: Carrinho não pode ser pago mais de uma vez
-- [ ] Regra de negócio: Produtos não podem ser adicionados a carrinhos já pagos
-- [ ] Regra de negócio: Não pode adicionar o mesmo produto ao carrinho mais de uma vez
+- [x] Regra de negócio: Produtos não podem ser adicionados a carrinhos já pagos
+- [x] Regra de negócio: Não pode adicionar o mesmo produto ao carrinho mais de uma vez
 - [x] Regra de negócio: Um produto pode ter uma ou nenhuma categoria
 - [x] Regra de negócio: Um item do carrinho corresponde a um produto e a quantidade daquele produto comprada
 - [ ] Regra de negócio: O consumidor deve poder alterar a quantidade comprada de um produto
-- [ ] Regra de negício: O consumidor deve poder remover um produto do carrinho
+- [x] Regra de negício: O consumidor deve poder remover um produto do carrinho
