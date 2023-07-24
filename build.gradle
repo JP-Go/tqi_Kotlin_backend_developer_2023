@@ -29,6 +29,8 @@ dependencies {
 	implementation 'org.jetbrains.kotlin:kotlin-reflect'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+    testRuntimeOnly 'com.h2database:h2'
+    testImplementation 'io.mockk:mockk:1.13.4'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
