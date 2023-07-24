@@ -9,6 +9,8 @@ import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
+import io.mockk.just
+import io.mockk.runs
 import io.mockk.verify
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
@@ -71,7 +73,19 @@ class ProductCategoryServiceTest {
 
         Assertions.assertThat(categories).isNotNull
         Assertions.assertThat(categories.size).isEqualTo(3)
-        verify (exactly = 1){productCategoryRepository.findAll()}
+        verify(exactly = 1) { productCategoryRepository.findAll() }
+    }
+
+    @Test fun `should be able to delete an entity`() {
+        val fakeId = Random().nextLong()
+        val fakeCategory = buildProductCategory(id = fakeId)
+        every { productCategoryRepository.findById(fakeId) } returns Optional.of(fakeCategory)
+        every { productCategoryRepository.delete(fakeCategory) } just runs
+
+        productCategoryService.deleteById(fakeId)
+
+        verify(exactly = 1) { productCategoryRepository.findById(fakeId) }
+        verify(exactly = 1) { productCategoryRepository.delete(fakeCategory) }
     }
 
     private fun buildProductCategory(name: String = "Frutas", id: Long = 1L) = ProductCategory(name = name, id = id)
