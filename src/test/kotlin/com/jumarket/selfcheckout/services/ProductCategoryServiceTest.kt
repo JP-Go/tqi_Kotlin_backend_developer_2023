@@ -12,14 +12,12 @@ import io.mockk.junit5.MockKExtension
 import io.mockk.just
 import io.mockk.runs
 import io.mockk.verify
+import java.util.Optional
+import java.util.Random
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import org.springframework.test.context.ActiveProfiles
-import java.util.Optional
-import java.util.Random
 
-@ActiveProfiles("test")
 @ExtendWith(MockKExtension::class)
 class ProductCategoryServiceTest {
 
@@ -59,14 +57,18 @@ class ProductCategoryServiceTest {
         every { productCategoryRepository.findById(fakeId) } returns Optional.empty()
 
         Assertions.assertThatExceptionOfType(ProductCategoryNotFoundException::class.java)
-            .isThrownBy { productCategoryService.findById(fakeId) }
-            .withMessage("Product category with id $fakeId not found")
+                .isThrownBy { productCategoryService.findById(fakeId) }
+                .withMessage("Product category with id $fakeId not found")
 
         verify(exactly = 1) { productCategoryRepository.findById(fakeId) }
     }
 
-    @Test fun `should return a list of product categories`() {
-        val fakeCategories = listOf(1, 2, 3).map { buildProductCategory(name = "Cat $it", id = Random().nextLong()) }
+    @Test
+    fun `should return a list of product categories`() {
+        val fakeCategories =
+                listOf(1, 2, 3).map {
+                    buildProductCategory(name = "Cat $it", id = Random().nextLong())
+                }
         every { productCategoryRepository.findAll() } returns fakeCategories
 
         val categories = productCategoryService.findAllProductCategory()
@@ -76,7 +78,8 @@ class ProductCategoryServiceTest {
         verify(exactly = 1) { productCategoryRepository.findAll() }
     }
 
-    @Test fun `should be able to delete an entity`() {
+    @Test
+    fun `should be able to delete an entity`() {
         val fakeId = Random().nextLong()
         val fakeCategory = buildProductCategory(id = fakeId)
         every { productCategoryRepository.findById(fakeId) } returns Optional.of(fakeCategory)
@@ -88,6 +91,7 @@ class ProductCategoryServiceTest {
         verify(exactly = 1) { productCategoryRepository.delete(fakeCategory) }
     }
 
-    private fun buildProductCategory(name: String = "Frutas", id: Long = 1L) = ProductCategory(name = name, id = id)
+    private fun buildProductCategory(name: String = "Frutas", id: Long = 1L) =
+            ProductCategory(name = name, id = id)
     private fun buildProductCategoryDTO(name: String = "Frutas") = ProductCategoryDTO(name = name)
 }

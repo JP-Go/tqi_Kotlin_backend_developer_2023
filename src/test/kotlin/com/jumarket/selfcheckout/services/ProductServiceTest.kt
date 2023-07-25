@@ -10,15 +10,13 @@ import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
-import org.assertj.core.api.Assertions
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
-import org.springframework.test.context.ActiveProfiles
 import java.math.BigDecimal
 import java.util.Optional
 import java.util.Random
+import org.assertj.core.api.Assertions
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 
-@ActiveProfiles("test")
 @ExtendWith(MockKExtension::class)
 class ProductServiceTest {
     @MockK lateinit var categoryService: IProductCategoryService
@@ -30,14 +28,17 @@ class ProductServiceTest {
     @Test
     fun `should be able to save a product with or without category`() {
         val fakeProduct1 = buildProduct()
-        val fakeProduct2 = buildProduct(productCategory = ProductCategory(id = Random().nextLong(), name = "Frutas"))
+        val fakeProduct2 =
+                buildProduct(
+                        productCategory = ProductCategory(id = Random().nextLong(), name = "Frutas")
+                )
 
         val fakeProductDTO1 = buildProductDTO(fakeProduct1)
         val fakeProductDTO2 = buildProductDTO(fakeProduct2)
 
         every { productRepository.save(any()) } returns fakeProduct1 andThen fakeProduct2
         every { categoryService.findById(fakeProductDTO2.productCategory!!) } returns
-            fakeProduct2.productCategory!!
+                fakeProduct2.productCategory!!
 
         val actual1 = productService.createProduct(fakeProductDTO1)
 
@@ -57,14 +58,14 @@ class ProductServiceTest {
     fun `should be able to find a product by its id`() {
         val fakeId = Random().nextLong()
         val fakeProduct =
-            buildProduct(
-                productCategory =
-                ProductCategory(id = Random().nextLong(), name = "Frutas"),
-                id = fakeId,
-            )
+                buildProduct(
+                        productCategory =
+                                ProductCategory(id = Random().nextLong(), name = "Frutas"),
+                        id = fakeId,
+                )
         every { productRepository.findById(fakeId) } returns Optional.of(fakeProduct)
         every { categoryService.findById(fakeProduct.productCategory?.id!!) } returns
-            fakeProduct.productCategory!!
+                fakeProduct.productCategory!!
 
         val actual = productService.findById(fakeId)
 
@@ -78,8 +79,8 @@ class ProductServiceTest {
         every { productRepository.findById(fakeId) } returns Optional.empty()
 
         Assertions.assertThatExceptionOfType(ProductNotFoundException::class.java)
-            .isThrownBy { productService.findById(fakeId) }
-            .withMessage("Product with id $fakeId was not found")
+                .isThrownBy { productService.findById(fakeId) }
+                .withMessage("Product with id $fakeId was not found")
     }
 
     @Test
@@ -107,20 +108,20 @@ class ProductServiceTest {
     }
 
     private fun buildProduct(
-        productName: String = "Maçã",
-        unit: String = "un",
-        price: BigDecimal = BigDecimal.ZERO,
-        id: Long? = Random().nextLong(),
-        productCategory: ProductCategory? = null,
+            productName: String = "Maçã",
+            unit: String = "un",
+            price: BigDecimal = BigDecimal.ZERO,
+            id: Long? = Random().nextLong(),
+            productCategory: ProductCategory? = null,
     ) =
-        Product(
-            productName,
-            unit,
-            price,
-            id,
-            productCategory,
-        )
+            Product(
+                    productName,
+                    unit,
+                    price,
+                    id,
+                    productCategory,
+            )
 
     private fun buildProductDTO(entity: Product) =
-        ProductDTO(entity.productName, entity.unit, entity.price, entity.productCategory?.id)
+            ProductDTO(entity.productName, entity.unit, entity.price, entity.productCategory?.id)
 }
