@@ -30,7 +30,15 @@ Em seguida, para rodar o projeto, basta executar o seguinte comando:
 
 O backend estará disponível em `http://localhost:8080`
 
-# TODO
+## :white_check_mark: Testes
+
+Para rodar todos os testes de unidade e de integração, basta executar o seguinte comando
+
+```sh
+./gradlew test (ou gradlew.bat test)
+```
+
+## TODO
 
 - [ ] Regra de negócio: Carrinho não pode ser pago mais de uma vez
 - [x] Regra de negócio: Produtos não podem ser adicionados a carrinhos já pagos
