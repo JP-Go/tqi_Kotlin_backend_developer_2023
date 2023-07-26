@@ -22,7 +22,7 @@ execute o seguinte comando no terminal para provisionar o container:
 docker compose up -d
 ```
 
-Em seguida, para rodar o projeto, basta rodar o seguinte comando:
+Em seguida, para rodar o projeto, basta executar o seguinte comando:
 
 ```sh
 ./gradlew bootRun (ou gradlew.bat bootRun)
