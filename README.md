@@ -50,5 +50,5 @@ when the development server is online
 - [x] Regra de negócio: Não pode adicionar o mesmo produto ao carrinho mais de uma vez
 - [x] Regra de negócio: Um produto pode ter uma ou nenhuma categoria
 - [x] Regra de negócio: Um item do carrinho corresponde a um produto e a quantidade daquele produto comprada
-- [ ] Regra de negócio: O consumidor deve poder alterar a quantidade comprada de um produto
+- [x] Regra de negócio: O consumidor deve poder alterar a quantidade comprada de um produto
 - [x] Regra de negício: O consumidor deve poder remover um produto do carrinho
