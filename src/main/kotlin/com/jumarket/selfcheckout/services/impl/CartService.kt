@@ -9,6 +9,7 @@ import com.jumarket.selfcheckout.exceptions.ProductAlreadyOnCartException
 import com.jumarket.selfcheckout.repositories.CartItemRepository
 import com.jumarket.selfcheckout.repositories.CartRepository
 import com.jumarket.selfcheckout.services.ICartService
+import java.math.BigDecimal
 import org.springframework.data.domain.Example
 import org.springframework.data.domain.ExampleMatcher
 import org.springframework.stereotype.Service
@@ -51,6 +52,15 @@ class CartService(
             paymentMethod = method
         }
         cartRepository.save(cart)
+    }
+
+    override fun changeItemQuantity(cartItem: CartItem, newQuantity: Int): Cart {
+        if (cartItem.cart!!.paid)
+                throw CartAlreadyPaidException("Can not add/remove itens of a paid cart")
+        cartItem.quantity = newQuantity
+        cartItem.totalPrice = cartItem.product!!.price.times(BigDecimal(newQuantity))
+        val savedCartItem = cartItemRepository.save(cartItem)
+        return savedCartItem.cart!!
     }
 
     fun isProductOnCart(cartItem: CartItem): Boolean {

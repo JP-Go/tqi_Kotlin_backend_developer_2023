@@ -93,4 +93,18 @@ class CartController(
         cartService.payCart(cart, method)
         return "Cart with id ${cart.id}, total: R\$ $total was paid by $method"
     }
+
+    @PatchMapping("/{cartId}/change-quantity")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(
+            summary = "Change product quantity",
+            description =
+                    "Changes the quantity of a product on a cart if given the product id and new quantity and returns the cart"
+    )
+    fun changeQuantity(@PathVariable cartId: Long, @RequestBody @Valid dto: CartItemDTO): CartView {
+        val cart = cartService.findCart(cartId)
+        val cartItem = cartItemService.findCartItemOnCart(cart, dto.productId)
+        cartService.changeItemQuantity(cartItem, dto.quantity)
+        return cartFromEntity(cart)
+    }
 }

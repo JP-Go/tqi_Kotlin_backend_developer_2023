@@ -7,13 +7,13 @@ import com.jumarket.selfcheckout.exceptions.CartItemNotFoundException
 import com.jumarket.selfcheckout.repositories.CartItemRepository
 import com.jumarket.selfcheckout.services.ICartItemService
 import com.jumarket.selfcheckout.services.IProductService
-import org.springframework.stereotype.Service
 import java.math.BigDecimal
+import org.springframework.stereotype.Service
 
 @Service
 class CartItemService(
-    private val cartItemRepository: CartItemRepository,
-    private val productService: IProductService,
+        private val cartItemRepository: CartItemRepository,
+        private val productService: IProductService,
 ) : ICartItemService {
 
     override fun findCartItem(id: Long): CartItem {
@@ -34,10 +34,10 @@ class CartItemService(
         val product = productService.findById(dto.productId)
         val totalPrice: BigDecimal = product.price * BigDecimal(quantity)
         return CartItem(
-            cart = cart,
-            product = product,
-            quantity = quantity,
-            totalPrice = totalPrice,
+                cart = cart,
+                product = product,
+                quantity = quantity,
+                totalPrice = totalPrice,
         )
     }
 }
