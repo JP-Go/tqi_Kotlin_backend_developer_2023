@@ -43,6 +43,17 @@ Para rodar todos os testes de unidade e de integração, basta executar o seguin
 A documentação da API, seguindo a especificação OpenAPI v3, está disponível [aqui](./docs/api-docs.json) e no endereço [https://localhost:8080/docs](https://localhost:8080/docs)
 quando o servidor de desenvolvimento está online.
 
+## :camera_flash: Sobre mim
+
+Sou João Pedro Gomes, desenvolvedor FullStack com experiência em JavaScript/TypeScript, Node.js, React.js e outros frameworks JavaScript e, graças a
+[TQI](https://www.tqi.com.br/), com experiência em Kotlin e Spring. Sou formado em Licenciatura em Física no Instituto Federal do Piauí e, na
+área da programação, sou autodidata. Comecei a estudar programação por conta própria em 2018 e aprendi o que sei de programação com os cursos gratuitos no YouTube e bootcamps online de instituições como
+a [Rockeseat](https://www.rocketseat.com.br/) e a [DIO](https://www.dio.me). Neste mês, julho de 2023, completo 5 meses de trabalho na área da
+tecnologia. Tenho paixão pelo desenvolvimento e pela tecnologia e entusiasmo em aprender coisas novas. Busco no momento atual aprimorar meus
+conhecimentos e oportunidades de adquirir mais experiência profissional.
+
+Se quiser conhecer meus trabalhos, veja mais no meu perfil do Github [aqui](https://github.com/JP-Go)
+
 ## TODO
 
 - [x] Regra de negócio: Carrinho não pode ser pago mais de uma vez
