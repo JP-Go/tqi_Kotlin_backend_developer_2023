@@ -9,14 +9,15 @@ import com.jumarket.selfcheckout.exceptions.ProductAlreadyOnCartException
 import com.jumarket.selfcheckout.repositories.CartItemRepository
 import com.jumarket.selfcheckout.repositories.CartRepository
 import com.jumarket.selfcheckout.services.ICartService
+import java.math.BigDecimal
 import org.springframework.data.domain.Example
 import org.springframework.data.domain.ExampleMatcher
 import org.springframework.stereotype.Service
 
 @Service
 class CartService(
-    private val cartRepository: CartRepository,
-    private val cartItemRepository: CartItemRepository,
+        private val cartRepository: CartRepository,
+        private val cartItemRepository: CartItemRepository,
 ) : ICartService {
 
     override fun createCart(): Cart {
@@ -31,16 +32,21 @@ class CartService(
 
     override fun addCartItem(cartItem: CartItem) {
         if (cartItem.cart!!.paid) throw CartAlreadyPaidException("Can not add itens to a paid cart")
-        if (isProductOnCart(cartItem)) throw ProductAlreadyOnCartException("Product ${cartItem.product?.productName} already on cart")
+        if (isProductOnCart(cartItem))
+                throw ProductAlreadyOnCartException(
+                        "Product ${cartItem.product?.productName} already on cart"
+                )
         cartItemRepository.save(cartItem)
     }
 
     override fun removeCartItem(cartItem: CartItem) {
-        if (cartItem.cart!!.paid) throw CartAlreadyPaidException("Can not remove itens of a paid cart")
+        if (cartItem.cart!!.paid)
+                throw CartAlreadyPaidException("Can not remove itens of a paid cart")
         cartItemRepository.delete(cartItem)
     }
 
     override fun payCart(cart: Cart, method: PaymentMethod) {
+        if (cart.paid) throw CartAlreadyPaidException("Can not pay a cart twice")
         cart.apply {
             paid = true
             paymentMethod = method
@@ -48,10 +54,19 @@ class CartService(
         cartRepository.save(cart)
     }
 
+    override fun changeItemQuantity(cartItem: CartItem, newQuantity: Int): Cart {
+        if (cartItem.cart!!.paid)
+                throw CartAlreadyPaidException("Can not add/remove itens of a paid cart")
+        cartItem.quantity = newQuantity
+        cartItem.totalPrice = cartItem.product!!.price.times(BigDecimal(newQuantity))
+        val savedCartItem = cartItemRepository.save(cartItem)
+        return savedCartItem.cart!!
+    }
+
     fun isProductOnCart(cartItem: CartItem): Boolean {
-        val matcher = ExampleMatcher.matching()
-            .withIgnorePaths("quantity", "totalPrice")
-        val cartItemExample = Example.of(CartItem(cart = cartItem.cart, product = cartItem.product), matcher)
+        val matcher = ExampleMatcher.matching().withIgnorePaths("quantity", "totalPrice")
+        val cartItemExample =
+                Example.of(CartItem(cart = cartItem.cart, product = cartItem.product), matcher)
         return cartItemRepository.findOne(cartItemExample).isPresent()
     }
 }

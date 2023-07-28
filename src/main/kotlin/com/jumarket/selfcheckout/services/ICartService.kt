@@ -10,4 +10,5 @@ interface ICartService {
     fun addCartItem(cartItem: CartItem)
     fun removeCartItem(cartItem: CartItem)
     fun payCart(cart: Cart, method: PaymentMethod)
+    fun changeItemQuantity(cartItem: CartItem, newQuantity: Int): Cart
 }
