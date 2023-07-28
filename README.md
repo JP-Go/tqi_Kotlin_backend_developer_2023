@@ -38,6 +38,11 @@ Para rodar todos os testes de unidade e de integração, basta executar o seguin
 ./gradlew test (ou gradlew.bat test)
 ```
 
+## :memo: Documentation
+
+The API documentation, following the OpenAPI v3 specification, is available [here](./docs/api-docs.json) and at [https://localhost:8080/docs](https://localhost:8080/docs)
+when the development server is online
+
 ## TODO
 
 - [ ] Regra de negócio: Carrinho não pode ser pago mais de uma vez
