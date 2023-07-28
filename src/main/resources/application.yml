@@ -4,3 +4,6 @@ spring:
     username: selfcheckout
     password: selfcheckout
     driver-class-name: org.mariadb.jdbc.Driver
+springdoc:
+  swagger-ui:
+    path: /docs
