@@ -33,6 +33,7 @@ class CartService(
     }
 
     override fun payCart(cart: Cart, method: PaymentMethod) {
+        if (cart.paid) throw CartAlreadyPaidException("Can not pay a cart twice")
         cart.apply {
             paid = true
             paymentMethod = method
