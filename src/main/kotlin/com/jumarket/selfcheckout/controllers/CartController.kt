@@ -9,6 +9,7 @@ import com.jumarket.selfcheckout.services.ICartService
 import com.jumarket.selfcheckout.services.IProductService
 import com.jumarket.selfcheckout.views.CartView
 import com.jumarket.selfcheckout.views.cartFromEntity
+import io.swagger.v3.oas.annotations.Operation
 import jakarta.validation.Valid
 import java.math.BigDecimal
 import org.springframework.http.HttpStatus
@@ -32,6 +33,7 @@ class CartController(
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @Operation(summary = "Create cart", description = "Creates a cart and returns it")
     fun createNewCart(): CartView {
         val cart = cartService.createCart()
         return cartFromEntity(cart)
@@ -39,13 +41,19 @@ class CartController(
 
     @GetMapping("/{cartId}")
     @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Get cart", description = "Returns the cart info if given the cart's id")
     fun getCart(@PathVariable cartId: Long): CartView {
         val cart = cartService.findCart(cartId)
         return cartFromEntity(cart)
     }
 
-    @PostMapping("/{cartId}/add")
+    @PatchMapping("/{cartId}/add")
     @ResponseStatus(HttpStatus.OK)
+    @Operation(
+            summary = "Add product to cart",
+            description =
+                    "Adds a product to a cart if given the product id and quantity and returns the cart"
+    )
     fun addProductToCart(
             @PathVariable cartId: Long,
             @RequestBody @Valid dto: CartItemDTO
@@ -58,6 +66,10 @@ class CartController(
 
     @PatchMapping("/{cartId}/remove")
     @ResponseStatus(HttpStatus.OK)
+    @Operation(
+            summary = "Remove product from cart",
+            description = "Removes a product from a cart if given the product id and returns it"
+    )
     fun removeProductFromCart(
             @PathVariable cartId: Long,
             @RequestBody @Valid dto: RemoveCartItemDTO
@@ -70,6 +82,10 @@ class CartController(
 
     @PatchMapping("/{cartId}/checkout")
     @ResponseStatus(HttpStatus.OK)
+    @Operation(
+            summary = "Pay cart",
+            description = "Pays the total ammount owed for the products of the cart"
+    )
     fun payCart(@PathVariable cartId: Long, @RequestBody @Valid dto: PayCartDTO): String {
         val cart = cartService.findCart(cartId)
         val method = PaymentMethod.valueOf(dto.paymentMethod)

@@ -2,11 +2,11 @@ package com.jumarket.selfcheckout.controllers
 
 import com.jumarket.selfcheckout.dtos.ProductDTO
 import com.jumarket.selfcheckout.dtos.SetProductCategoryDTO
-import com.jumarket.selfcheckout.entities.Product
 import com.jumarket.selfcheckout.services.IProductCategoryService
 import com.jumarket.selfcheckout.services.IProductService
 import com.jumarket.selfcheckout.views.ProductView
 import com.jumarket.selfcheckout.views.productViewfromEntity
+import io.swagger.v3.oas.annotations.Operation
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.GetMapping
@@ -27,6 +27,7 @@ class ProductController(
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Get products", description = "Gets all products registered")
     fun getAllProducts(): List<ProductView> {
         val products = productService.findAll().map { productViewfromEntity(it) }
         return products
@@ -34,6 +35,7 @@ class ProductController(
 
     @GetMapping("{productId}")
     @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Get product", description = "Gets a product by its id")
     fun getProduct(@PathVariable productId: Long): ProductView {
         val product = productService.findById(productId)
         return productViewfromEntity(product)
@@ -41,16 +43,26 @@ class ProductController(
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    fun createProduct(@RequestBody @Valid dto: ProductDTO): Product {
+    @Operation(
+            summary = "Create product",
+            description =
+                    "Creates a new product if given its name, unit of measurement and price, and returns it. Optionally, a product category id can be given to set the product category uppon creation"
+    )
+    fun createProduct(@RequestBody @Valid dto: ProductDTO): ProductView {
         val savedProduct = productService.createProduct(dto)
-        return savedProduct
+        return productViewfromEntity(savedProduct)
     }
 
     @PatchMapping("{productId}")
     @ResponseStatus(HttpStatus.OK)
+    @Operation(
+            summary = "Sets product",
+            description =
+                    "Sets the product category if given its id and the productCategoryId. If null is explictly passed to productCategoryId, the category association is removed"
+    )
     fun setProductCategory(
             @PathVariable productId: Long,
-            @RequestBody setProductCategoryDTO: SetProductCategoryDTO,
+            @RequestBody @Valid setProductCategoryDTO: SetProductCategoryDTO,
     ): ProductView {
         val savedProduct =
                 productService.setProductCategory(

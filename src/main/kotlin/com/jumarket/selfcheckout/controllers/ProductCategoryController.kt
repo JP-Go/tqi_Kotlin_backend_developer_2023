@@ -5,6 +5,7 @@ import com.jumarket.selfcheckout.entities.ProductCategory
 import com.jumarket.selfcheckout.services.IProductCategoryService
 import com.jumarket.selfcheckout.views.ProductCategoryView
 import com.jumarket.selfcheckout.views.productCategoryViewFromEntity
+import io.swagger.v3.oas.annotations.Operation
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -24,38 +25,55 @@ class ProductCategoryController(val productCategoryService: IProductCategoryServ
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Finds product categories", description = "Finds all product categories")
     fun findAllCategories(): List<ProductCategory> {
         return productCategoryService.findAllProductCategory()
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{productId}")
     @ResponseStatus(HttpStatus.OK)
-    fun findCategory(@PathVariable id: Long): ProductCategoryView {
-        val category = productCategoryService.findById(id)
+    @Operation(
+            summary = "Find product category by id",
+            description = "Finds a product category by its product category id"
+    )
+    fun findCategory(@PathVariable productId: Long): ProductCategoryView {
+        val category = productCategoryService.findById(productId)
         return productCategoryViewFromEntity(category)
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @Operation(
+            summary = "Create product category",
+            description = "Creates a new product category if given the name and returns it"
+    )
     fun createCategory(@RequestBody @Valid dto: ProductCategoryDTO): ProductCategoryView {
         val productCategorySaved = productCategoryService.createNewCategory(dto)
         return productCategoryViewFromEntity(productCategorySaved)
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{productId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun deleteCategory(@PathVariable id: Long): ResponseEntity<Nothing> {
-        productCategoryService.deleteById(id)
+    @Operation(
+            summary = "Delete product category",
+            description = "Deletes a product category if given the id. Returns nothing"
+    )
+    fun deleteCategory(@PathVariable productId: Long): ResponseEntity<Nothing> {
+        productCategoryService.deleteById(productId)
         return ResponseEntity(HttpStatus.NO_CONTENT)
     }
 
-    @PatchMapping("/{id}")
+    @PatchMapping("/{productId}")
     @ResponseStatus(HttpStatus.OK)
+    @Operation(
+            summary = "Change product category name",
+            description = "Changes the product category name if given the new name and returns it"
+    )
     fun changeCategoryName(
-            @PathVariable id: Long,
+            @PathVariable productId: Long,
             @RequestBody @Valid dto: ProductCategoryDTO
     ): ResponseEntity<ProductCategoryView> {
-        val updatedCategory = productCategoryService.changeProductCategoryName(id, dto.name)
+        val updatedCategory = productCategoryService.changeProductCategoryName(productId, dto.name)
         return ResponseEntity(
                 productCategoryViewFromEntity(updatedCategory),
                 HttpStatus.OK,
